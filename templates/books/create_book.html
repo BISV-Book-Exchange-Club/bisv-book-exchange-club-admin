@@ -43,7 +43,7 @@
           <label for="html">Image:</label> <input type="text" placeholder="Book Image here" name="image" id="image" value="{{image}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" value="{{price}}" class="form-control">
+          <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" id="price" value="{{price}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Status:</label> 
@@ -88,11 +88,24 @@
               dataType: "json",
               encode: false,
             }).done(function (data) {
-              $('#title').val(data.title);
-              $('#isbn10').val(data.isbn10);
-              $('#author').val(data.author);
-              $('#publisher').val(data.publisher);
-              $('#image').val(data.image);
+              if (data.title != '' && $('#title').val() == '') {
+                  $('#title').val(data.title);
+              }
+              if (data.isbn10 != '' && $('#isbn10').val() == '') {
+                  $('#isbn10').val(data.isbn10);
+              }
+              if (data.author != '' && $('#author').val() == '') {
+                  $('#author').val(data.author);
+              }
+              if (data.publisher != '' && $('#publisher').val() == '') {
+                  $('#publisher').val(data.publisher);
+              }
+              if (data.image != '' && $('#image').val() == '') {
+                  $('#image').val(data.image);
+              }
+              if (data.price != '' && $('#price').val() == '') {
+                  $('#price').val(data.price);
+              }
               console.log(data);
             });
             event.preventDefault();

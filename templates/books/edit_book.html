@@ -19,7 +19,7 @@
       <h3 class="text-center display-4">Edit a Book</h3>
       <form method="POST">
         <div class="mb-3">
-          <label for="html">ISBN-13:</label> <input type="text" required class="form-control" name="isbn13" id="isbn13" value="{{book.isbn13}}" placeholder="Book ISBN13 here"> <input id="getbookinfo" type="button" value="Get Book Info" disabled>
+          <label for="html">ISBN-13:</label> <input type="text" required class="form-control" name="isbn13" id="isbn13" value="{{book.isbn13}}" placeholder="Book ISBN13 here"> <input id="getbookinfo" type="button" value="Get Book Info">
         </div>
         <div class="mb-3">
           <label for="html">Title:</label> <input type="text" required class="form-control" name="title" id="title" value="{{book.title}}" placeholder="Book Title here">
@@ -34,16 +34,16 @@
           <label for="html">ISBN-10:</label> <input type="text" placeholder="Book ISBN10 here" name="isbn10" id="isbn10" value="{{book.isbn10}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Edition/Copyright:</label> <input type="text" placeholder="Book Edition Copyright here" name="book.editioncopyright" value="{{editioncopyright}}" class="form-control">
+          <label for="html">Edition/Copyright:</label> <input type="text" placeholder="Book Edition Copyright here" name="editioncopyright" value="{{editioncopyright}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Publisher:</label> <input type="text" placeholder="Book Publisher here" name="publisher" id="book.publisher" value="{{publisher}}" class="form-control">
+          <label for="html">Publisher:</label> <input type="text" placeholder="Book Publisher here" name="publisher" id="publisher" value="{{publisher}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Image:</label> <input type="text" placeholder="Book Image here" name="image" id="image" value="{{book.image}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" value="{{book.price}}" class="form-control">
+          <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" id="price" value="{{book.price}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Status:</label> 
@@ -84,11 +84,24 @@
               dataType: "json",
               encode: false,
             }).done(function (data) {
-              $('#title').val(data.title);
-              $('#isbn10').val(data.isbn10);
-              $('#author').val(data.author);
-              $('#publisher').val(data.publisher);
-              $('#image').val(data.image);
+              if (data.title != '' && $('#title').val() == '') {
+                  $('#title').val(data.title);
+              }
+              if (data.isbn10 != '' && $('#isbn10').val() == '') {
+                  $('#isbn10').val(data.isbn10);
+              }
+              if (data.author != '' && $('#author').val() == '') {
+                  $('#author').val(data.author);
+              }
+              if (data.publisher != '' && $('#publisher').val() == '') {
+                  $('#publisher').val(data.publisher);
+              }
+              if (data.image != '' && $('#image').val() == '') {
+                  $('#image').val(data.image);
+              }
+              if (data.price != '' && $('#price').val() == '') {
+                  $('#price').val(data.price);
+              }
               console.log(data);
             });
             event.preventDefault();

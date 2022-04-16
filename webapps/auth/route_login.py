@@ -34,9 +34,10 @@ async def login(request: Request, db: Session = Depends(get_db)):
     await form.load_data()
     if await form.is_valid():
         try:
-            form.__dict__.update(msg="Login Successful :)")
-            response = templates.TemplateResponse("auth/login.html", form.__dict__)
-            response = templates.TemplateResponse("general_pages/homepage.html", form.__dict__)
+            msg="Login Successful :)"
+            form.__dict__.update(msg=msg)
+            books = list_books(db=db)
+            response = templates.TemplateResponse("general_pages/homepage.html", {"request": request, "books": books, "msg": msg})
             login_for_access_token(response=response, form_data=form, db=db)
             return response
         except HTTPException:

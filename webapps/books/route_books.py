@@ -38,7 +38,6 @@ templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)
 
 
-
 def get_bookinfo_by_isbn(raw_isbn13):
     import json
     import requests
@@ -52,7 +51,8 @@ def get_bookinfo_by_isbn(raw_isbn13):
         'author': '',
         'title': '',
         'publisher': '',
-        'image': ''
+        'image': '',
+        'price': ''
     }
     try:
         url = 'https://openlibrary.org/api/books?bibkeys=ISBN:{}&jscmd=details&format=json'.format(isbn13)
@@ -72,15 +72,18 @@ def get_bookinfo_by_isbn(raw_isbn13):
                             bookinfo['title'] = subvalue[detail]
                         if (detail == 'publishers'):
                             if (len(subvalue[detail]) > 0):
-                                bookinfo['publisher'] = subvalue[detail][0]
+                                bookinfo['publisher'] = ', '.join(subvalue[detail])
                         if (detail == 'isbn_10'):
                             if (len(subvalue[detail]) > 0):
-                                bookinfo['isbn10'] = subvalue[detail][0]
+                                bookinfo['isbn10'] = ', '.join(subvalue[detail])
                         if (detail == 'authors'):
                             if (len(subvalue[detail]) > 0):
-                                author = subvalue[detail][0]
-                                if ('name' in author.keys()):
-                                    bookinfo['author'] = author['name']
+                                authors = []
+                                for ind in range(len(subvalue[detail])):
+                                    author = subvalue[detail][ind]
+                                    if ('name' in author.keys()):
+                                        authors.append(author['name'])
+                                bookinfo['author'] = ', '.join(authors)
     except Exception as err:
         print('Exception: ' + str(err))
     return bookinfo
@@ -275,7 +278,7 @@ def import_book(header_dict, row, db, owner_id):
                     email='No Email',
                     paypal='',
                     zelle='',
-                    collection='',
+                    collection=book['collection'],
                     owner_id=owner_id 
                 )
                 new_seller = create_new_seller(seller=new_sellercreate, db=db, owner_id=owner_id)
