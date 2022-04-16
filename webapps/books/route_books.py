@@ -254,7 +254,7 @@ def import_book(header_dict, row, db, owner_id):
         # Check book with UUID, skip it the book exists, ignore the book with empty isbn
         existing_book = retrieve_book_by_uuid(book['uuid'], db)
         isbn13_str = str(book['isbn13'])
-        if (existing_book is not None and isbn13_str.strip() != ''):
+        if (not existing_book and isbn13_str.strip() != ''):
             # Round price
             try:
                 str_price = str(book['price'])
