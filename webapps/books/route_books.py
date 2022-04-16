@@ -271,8 +271,8 @@ def import_book(header_dict, row, db, owner_id):
             try:
                 if (book['collection'].strip() != ''):
                     seller = get_seller_id_from_collection(book['collection'].strip(), db)
-                    if (seller is not None and seller.first()):
-                        book['seller_id'] = seller.first().id
+                    if (seller):
+                        book['seller_id'] = seller.id
             except Exception:
                 book['seller_id'] = 0
 
