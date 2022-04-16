@@ -6,7 +6,7 @@ from db.models.users import Users
 from db.repository.books import create_new_book
 from db.repository.books import delete_book_by_id
 from db.repository.books import list_books
-from db.repository.books import retreive_book
+from db.repository.books import retrieve_book
 from db.repository.books import search_book
 from db.repository.books import update_book_by_id
 from db.session import get_db
@@ -38,7 +38,7 @@ def create_book(
     "/get/{id}", response_model=ShowBook
 )  # if we keep just "{id}" . it would stat catching all routes
 def read_book(id: int, db: Session = Depends(get_db)):
-    book = retreive_book(id=id, db=db)
+    book = retrieve_book(id=id, db=db)
     if not book:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -70,7 +70,7 @@ def delete_book(
     db: Session = Depends(get_db),
     current_user: Users = Depends(get_current_user_from_token),
 ):
-    book = retreive_book(id=id, db=db)
+    book = retrieve_book(id=id, db=db)
     if not book:
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

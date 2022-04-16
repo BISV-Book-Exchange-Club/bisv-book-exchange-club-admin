@@ -41,10 +41,10 @@ class BookCreateForm:
         self.seller_id = form.get("seller_id")
 
     def is_valid(self):
-        if not self.isbn13 or not len(self.isbn13) < 13:
-            self.errors.append("A valid ISBN is required")
-        if not self.seller_id:
-            self.errors.append("Valid Seller ID is required")
+        #if not self.isbn13 or not len(self.isbn13) < 13:
+        #    self.errors.append("A valid ISBN is required")
+        #if not self.seller_id:
+        #    self.errors.append("Valid Seller ID is required")
         if not self.errors:
             return True
         return False

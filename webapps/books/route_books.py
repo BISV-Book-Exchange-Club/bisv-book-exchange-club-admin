@@ -11,8 +11,8 @@ from core.security import get_api_key
 from db.models.users import Users
 from db.repository.books import create_new_book
 from db.repository.books import list_books
-from db.repository.books import retreive_book
-from db.repository.books import retreive_book_by_uuid
+from db.repository.books import retrieve_book
+from db.repository.books import retrieve_book_by_uuid
 from db.repository.books import search_book
 from db.repository.books import update_book_by_id
 from db.repository.sellers import create_new_seller
@@ -111,7 +111,7 @@ def list_all_books(request: Request, db: Session = Depends(get_db), api_key: API
 
 @router.get("/books/{id}")
 def book_detail(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
-    book = retreive_book(id=id, db=db)
+    book = retrieve_book(id=id, db=db)
     return templates.TemplateResponse(
         "books/detail.html", {"request": request, "book": book}
     )
@@ -150,7 +150,9 @@ async def create_book(request: Request, db: Session = Depends(get_db), api_key: 
 
 @router.get("/edit-a-book/{id}")
 def edit_book(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
-    book = retreive_book(id=id, db=db)
+    book = retrieve_book(id=id, db=db)
+    print('EDIT')
+    print(str(book.status))
     return templates.TemplateResponse(
         "books/edit_book.html", {"request": request, "book": book}
     )
@@ -168,14 +170,17 @@ async def update_book(id: int, request: Request, db: Session = Depends(get_db), 
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
             book = BookCreate(**form.__dict__)
+            print('PREUPD')
+            print(form.__dict__)
             book = update_book_by_id(id=id, book=book, db=db)
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(
                 "You might not be logged in, In case problem persists please contact us."
             )
-            return templates.TemplateResponse("general_pages/homepage.html", form.__dict__)
-    book = retreive_book(id=id, db=db)
+            books = list_books(db=db)
+            return templates.TemplateResponse("general_pages/homepage.html", {"request": request, "books": books})
+    book = retrieve_book(id=id, db=db)
     return templates.TemplateResponse(
         "books/edit_book.html", {"request": request, "book": book}
     )
@@ -247,7 +252,7 @@ def import_book(header_dict, row, db, owner_id):
         row_uuid = book['uuid']
 
         # Check book with UUID, skip it the book exists, ignore the book with empty isbn
-        existing_book = retreive_book_by_uuid(book['uuid'], db)
+        existing_book = retrieve_book_by_uuid(book['uuid'], db)
         isbn13_str = str(book['isbn13'])
         if (existing_book is not None and not existing_book.first() and isbn13_str.strip() != ''):
             # Round price

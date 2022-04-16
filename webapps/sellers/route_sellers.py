@@ -5,7 +5,7 @@ from core.security import get_api_key
 from db.models.users import Users
 from db.repository.sellers import create_new_seller
 from db.repository.sellers import list_sellers
-from db.repository.sellers import retreive_seller
+from db.repository.sellers import retrieve_seller
 from db.repository.sellers import search_seller
 from db.repository.sellers import update_seller_by_id
 from db.session import get_db
@@ -45,7 +45,7 @@ def list_all_sellers(request: Request, db: Session = Depends(get_db), api_key: A
 
 @router.get("/sellers/{id}")
 def seller_detail(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
-    seller = retreive_seller(id=id, db=db)
+    seller = retrieve_seller(id=id, db=db)
     return templates.TemplateResponse(
         "sellers/edit_seller.html", {"request": request, "seller": seller}
     )
@@ -83,7 +83,7 @@ async def create_seller(request: Request, db: Session = Depends(get_db), api_key
 
 @router.get("/edit-a-seller/{id}")
 def edit_seller(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
-    seller = retreive_seller(id=id, db=db)
+    seller = retrieve_seller(id=id, db=db)
     return templates.TemplateResponse(
         "sellers/edit_seller.html", {"request": request, "seller": seller}
     )
@@ -106,8 +106,9 @@ async def update_seller(id: int, request: Request, db: Session = Depends(get_db)
             form.__dict__.get("errors").append(
                 "You might not be logged in, In case problem persists please contact us."
             )
-            return templates.TemplateResponse("general_pages/homepage.html", form.__dict__)
-    seller = retreive_seller(id=id, db=db)
+            sellers = list_sellers(db=db)
+            return templates.TemplateResponse("general_pages/homepage.html", {"request": request, "seller": seller})
+    seller = retrieve_seller(id=id, db=db)
     return templates.TemplateResponse(
         "sellers/edit_seller.html", {"request": request, "seller": seller}
     )

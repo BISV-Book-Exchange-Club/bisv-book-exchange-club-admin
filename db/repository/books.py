@@ -26,12 +26,12 @@ def create_new_book(book: BookCreate, db: Session):
     db.refresh(book)
     return book 
 
-def retreive_book(id: int, db: Session):
+def retrieve_book(id: int, db: Session):
     item = db.query(Books).filter(Books.id == id).first()
     return item
 
-def retreive_book_by_uuid(uuid: str, db: Session):
-    item = db.query(Books).filter(Books.uuid == uuid)
+def retrieve_book_by_uuid(uuid: str, db: Session):
+    item = db.query(Books).filter(Books.uuid == uuid).first()
     return item
 
 
@@ -41,18 +41,22 @@ def list_books(db: Session):
 
 
 def update_book_by_id(id: int, book: BookCreate, db: Session):
-    existing_book = db.query(Books).filter(Books.id == id)
-    if not existing_book.first():
+    existing_book = db.query(Books).filter(Books.id == id).first()
+    if not existing_book:
         return 0
-    existing_book.update(book.__dict__)
+
+    for var, value in vars(book).items():
+        setattr(existing_book, var, value) if value else None
+
+    db.add(existing_book)
     db.commit()
     db.refresh(existing_book)
     return 1
 
 
 def delete_book_by_id(id: int, db: Session):
-    existing_book = db.query(Books).filter(Books.id == id)
-    if not existing_book.first():
+    existing_book = db.query(Books).filter(Books.id == id).first()
+    if not existing_book:
         return 0
     existing_book.delete(synchronize_session=False)
     db.commit()

@@ -34,10 +34,10 @@
           <label for="html">ISBN-10:</label> <input type="text" placeholder="Book ISBN10 here" name="isbn10" id="isbn10" value="{{book.isbn10}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Edition/Copyright:</label> <input type="text" placeholder="Book Edition Copyright here" name="editioncopyright" value="{{editioncopyright}}" class="form-control">
+          <label for="html">Edition/Copyright:</label> <input type="text" placeholder="Book Edition Copyright here" name="editioncopyright" value="{{book.editioncopyright}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Publisher:</label> <input type="text" placeholder="Book Publisher here" name="publisher" id="publisher" value="{{publisher}}" class="form-control">
+          <label for="html">Publisher:</label> <input type="text" placeholder="Book Publisher here" name="publisher" id="publisher" value="{{book.publisher}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Image:</label> <input type="text" placeholder="Book Image here" name="image" id="image" value="{{book.image}}" class="form-control">
@@ -46,21 +46,20 @@
           <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" id="price" value="{{book.price}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Status:</label> 
+          <label for="html">Status: (1: Available, -1: Sold)</label> 
           <select name="status">
-            <option value="1"{% if status==1 %} selected="selected"{% endif %}>Available</option>
-            <option value="0"{% if status==0 %} selected="selected"{% endif %}>Pending</option>
-            <option value="-1"{% if status==-1 %} selected="selected"{% endif %}>Sold</option>
+            <option value="1"{% if book.status==1 %} selected="selected"{% endif %}>Available</option>
+            <option value="-1"{% if book.status==-1 %} selected="selected"{% endif %}>Sold</option>
           </select>
         </div>
         <div class="mb-3">
-          <label for="html">Own By:</label> <input type="text" placeholder="Book Own By here" name="own" id="own" value="{{own}}" class="form-control">
+          <label for="html">Own By:</label> <input type="text" placeholder="Book Own By here" name="own" id="own" value="{{book.own}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Collection:</label> <input type="text" placeholder="Book Collection here" name="collection" id="collection" value="{{collection}}" class="form-control">
+          <label for="html">Collection:</label> <input type="text" placeholder="Book Collection here" name="collection" id="collection" value="{{book.collection}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">UUID:</label> <input type="text" placeholder="Book UUID here" name="uuid" id="uuid" value="{{uuid}}" class="form-control">
+          <label for="html">UUID:</label> <input type="text" placeholder="Book UUID here" name="uuid" id="uuid" value="{{book.uuid}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Seller ID:</label> <input type="number" placeholder="Book Seller ID here" name="seller_id" value="{{book.seller_id}}" class="form-control">

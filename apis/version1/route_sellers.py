@@ -6,7 +6,7 @@ from db.models.users import Users
 from db.repository.sellers import create_new_seller
 from db.repository.sellers import delete_seller_by_id
 from db.repository.sellers import list_sellers
-from db.repository.sellers import retreive_seller
+from db.repository.sellers import retrieve_seller
 from db.repository.sellers import search_seller
 from db.repository.sellers import update_seller_by_id
 from db.session import get_db
@@ -38,7 +38,7 @@ def create_seller(
     "/get_seller/{id}", response_model=ShowSeller
 )  # if we keep just "{id}" . it would stat catching all routes
 def read_seller(id: int, db: Session = Depends(get_db)):
-    seller = retreive_seller(id=id, db=db)
+    seller = retrieve_seller(id=id, db=db)
     if not seller:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -70,7 +70,7 @@ def delete_seller(
     db: Session = Depends(get_db),
     current_user: Users = Depends(get_current_user_from_token),
 ):
-    seller = retreive_seller(id=id, db=db)
+    seller = retrieve_seller(id=id, db=db)
     if not seller:
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
