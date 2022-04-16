@@ -103,10 +103,17 @@ async def home(request: Request, db: Session = Depends(get_db), msg: str = None,
 """
 
 @router.get("/list-all-books/")
-def list_all_books(request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+def list_all_books(request: Request, db: Session = Depends(get_db)):
     books = list_books(db=db)
     return templates.TemplateResponse(
         "books/list_all_books.html", {"request": request, "books": books}
+    )
+
+@router.get("/list-all-books-edit/")
+def list_all_books(request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+    books = list_books(db=db)
+    return templates.TemplateResponse(
+        "books/list_all_books_edit.html", {"request": request, "books": books}
     )
 
 @router.get("/books/{id}")
@@ -151,8 +158,6 @@ async def create_book(request: Request, db: Session = Depends(get_db), api_key: 
 @router.get("/edit-a-book/{id}")
 def edit_book(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     book = retrieve_book(id=id, db=db)
-    print('EDIT')
-    print(str(book.status))
     return templates.TemplateResponse(
         "books/edit_book.html", {"request": request, "book": book}
     )
@@ -237,7 +242,7 @@ def import_book(header_dict, row, db, owner_id):
             'publisher': '',
             'image': '',
             'price': 0,
-            'status': 1,
+            'is_available': True,
             'own': '',
             'collection': '',
             'uuid': '',
@@ -265,12 +270,31 @@ def import_book(header_dict, row, db, owner_id):
                 book['price'] = 0
 
             # Make the book available
-            book['status'] = 1
+            book['is_available'] = True 
 
             # Get seller ID by collection
             try:
                 if (book['collection'].strip() != ''):
-                    seller = get_seller_id_from_collection(book['collection'].strip(), db)
+                    book_collection_id = ''
+                    book_collection_name = ''
+
+                    book_collection = book['collection'].strip()
+                    book_collection_list = book_collection.split(' ')
+                    book_collection_id = book_collection_list[0].strip()
+                    if (len(book_collection_list) > 1):
+                        book_collection_name = book_collection_list[1].strip()
+
+                    # Find seller by ID
+                    seller = None
+                    try:
+                        book_collection_id_int = int(book_collection_id)
+                        seller = retrieve_seller(book_collection_id_int, db)
+                    except Exception:
+                        seller = None                    
+
+                    # Find seller by collection name
+                    if (not seller or seller is None):
+                        seller = get_seller_id_from_collection(book['collection'].strip(), db)
                     if (seller):
                         book['seller_id'] = seller.id
             except Exception:
@@ -282,11 +306,16 @@ def import_book(header_dict, row, db, owner_id):
                     name=book['collection'],
                     email='test@placeholder.org',
                     paypal='',
-                    zelle='',
                     collection=book['collection'],
-                    owner_id=owner_id 
+                    total_number_of_books=0,
+                    dropoff_location=0,
+                    pricing_option=0,
+                    proceed_option=0,
+                    extrabook_option=0,
+                    comments=''
                 )
-                new_seller = create_new_seller(seller=new_sellercreate, db=db, owner_id=owner_id)
+
+                new_seller = create_new_seller(seller=new_sellercreate, db=db)
                 book['seller_id'] = new_seller.id 
 
             # Create a book
@@ -300,7 +329,7 @@ def import_book(header_dict, row, db, owner_id):
                 publisher=book['publisher'],
                 image=book['image'],
                 price=book['price'],
-                status=book['status'],
+                is_available=book['is_available'],
                 own=book['own'],
                 collection=book['collection'],
                 uuid=book['uuid'],

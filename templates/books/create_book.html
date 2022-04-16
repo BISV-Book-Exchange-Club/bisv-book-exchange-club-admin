@@ -2,7 +2,7 @@
 
 
 {% block title %}
-  <title>Create a Book</title>
+  <title>Add a Book</title>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@
     </div>
 
     <div class="row my-5">
-      <h3 class="text-center display-4">Create a Book</h3>
+      <h3 class="text-center display-4">Add a Book</h3>
       <form method="POST">
         <div class="mb-3">
           <label for="html">ISBN-13:</label> <input type="text" required class="form-control" name="isbn13" id="isbn13" value="{{isbn13}}" placeholder="Book ISBN13 here"> <input id="getbookinfo" type="button" value="Get Book Info">
@@ -46,10 +46,10 @@
           <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" id="price" value="{{price}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Status:</label> 
-          <select name="status">
-            <option value="1"{% if status==1 %} selected="selected"{% endif %}>Available</option>
-            <option value="-1"{% if status==-1 %} selected="selected"{% endif %}>Sold</option>
+          <label for="html">Is Available?:</label> 
+          <select name="is_available">
+            <option value="1"{% if is_available==1 %} selected="selected"{% endif %}>Available</option>
+            <option value="0"{% if is_available==0 %} selected="selected"{% endif %}>Not Available</option>
           </select>
         </div>
         <div class="mb-3">

@@ -14,4 +14,3 @@ class Users(Base):
     otp_secret = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
-    sellers = relationship("Sellers", back_populates="owner")

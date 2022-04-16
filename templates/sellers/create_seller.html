@@ -2,7 +2,7 @@
 
 
 {% block title %}
-  <title>Create a Seller</title>
+  <title>Book Selling Form</title>
 {% endblock %}
 
 {% block content %}
@@ -16,23 +16,79 @@
     </div>
 
     <div class="row my-5">
-      <h3 class="text-center display-4">Create a Seller</h3>
+      <h3 class="text-center display-4">Book Selling Form</h3>
+      <p>
+PLEASE ONLY PRINT *ONE* COPY. NO MORE THAN ONE FORM IS NEEDED</p>
+
+<p>PRINTING: Type your answers into the spaces, but before pressing "Submit"/"Next" when done, press Control+P or Command+P to print your completed form, then submit.  Bring the paper copy with your books.</p>
+
+DONATIONS PER BOOK: $6 per book if we sell it on Amazon (it's a big hassle); if we sell a book to another BASIS family, we collect fees based on book sale price:  $2 per book if book sale price <= $20, $3 per book if $20 < book sale price <= $80,  $5 per book if the book sale price > $80. Fees will be adjusted for low cost books. </p>
       <form method="POST">
         <div class="mb-3">
+          <label>Name:</label> 
           <input type="text" required class="form-control" name="name" value="{{name}}" placeholder="Seller Name here">
         </div>
         <div class="mb-3">
+          <label>Email:</label>
           <input type="email" required placeholder="Seller Email here" name="email" value="{{email}}" class="form-control">
         </div>
         <div class="mb-3">
-          <input type="text" placeholder="Seller PayPal here" name="paypal" value="{{paypal}}" class="form-control">
-        </div>
-        <div class="mb-3">
-          <input type="text" placeholder="Seller Zelle here" name="zelle" value="{{zelle}}" class="form-control">
-        </div>
-        <div class="mb-3">
+          <label>Book collection:</label>
           <input type="text" placeholder="Seller Collection here" name="collection" value="{{collection}}" class="form-control">
         </div>
+
+        <div class="mb-3">
+          <label>Total number of books for sale:</label>
+          <input type="number" placeholder="Total number of books here" name="total_number_of_books" value="{{total_number_of_books}}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>Book drop-off location:</label>
+          <select name="dropoff_location">
+            <option value="1"{% if dropoff_location==1 %} selected="selected"{% endif %}>BISV</option>
+            <option value="2"{% if dropoff_location==2 %} selected="selected"{% endif %}>BASIS Fremont</option>
+            <option value="3"{% if dropoff_location==3 %} selected="selected"{% endif %}>Evergreen 95145</option>
+            <option value="4"{% if dropoff_location==4 %} selected="selected"{% endif %}>Evergreen 95138</option>
+            <option value="5"{% if dropoff_location==5 %} selected="selected"{% endif %}>West San Jose</option>
+            <option value="6"{% if dropoff_location==6 %} selected="selected"{% endif %}>Fremont</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="html">Pricing:</label>
+          <select name="pricing_option">
+            <option value="1"{% if pricing_option==1 %} selected="selected"{% endif %}>Please price the books for me</option>
+            <option value="2"{% if pricing_option==2 %} selected="selected"{% endif %}>We have our own prices (in this case, please label the inside cover of each book with its price)</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="html">What should we do with the proceeds?</label>
+          <select name="proceed_option">
+            <option value="1"{% if proceed_option==1 %} selected="selected"{% endif %}>I wish to donate ALL of my books & the subsequent money to the book drive</option>
+            <option value="2"{% if proceed_option==2 %} selected="selected"{% endif %}>PayPal it to me (enter information below)</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>My PayPal is (if you selected PayPal above):</label>
+          <input type="text" placeholder="Seller PayPal here" name="paypal" value="{{paypal}}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label for="html">What should we do with extra books that don't sell?</label>
+          <select name="extrabook_option">
+            <option value="1"{% if extrabook_option==1 %} selected="selected"{% endif %}>Donate to the book drive</option>
+            <option value="2"{% if extrabook_option==2 %} selected="selected"{% endif %}>I will pick up from BISV</option>
+            <option value="3"{% if extrabook_option==3 %} selected="selected"{% endif %}>I will pick up from BASIS Fremont</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Additional questions or comments:</label>
+          <input type="text" placeholder="Comments here" name="comments" value="{{comments}}" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>

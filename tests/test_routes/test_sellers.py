@@ -8,7 +8,6 @@ def test_create_seller(client, normal_user_token_headers):
         "name": "Super Seller",
         "email": "test@doogle.com",
         "paypal": "",
-        "zelle": "",
         "date_posted": "2022-04-01",
     }
     response = client.post(
@@ -24,7 +23,6 @@ def test_read_seller(client, normal_user_token_headers):
         "name": "Super Seller",
         "email": "www.doogle.com",
         "paypal": "",
-        "zelle": "",
         "date_posted": "2022-04-01",
     }
     response = client.post(
@@ -41,7 +39,6 @@ def test_read_sellers(client, normal_user_token_headers):
         "name": "Super Seller",
         "email": "www.doogle.com",
         "paypal": "",
-        "zelle": "",
         "date_posted": "2022-04-01",
     }
     client.post(
@@ -62,7 +59,6 @@ def test_update_a_seller(client, normal_user_token_headers):
         "name": "Super Seller",
         "email": "www.doogle.com",
         "paypal": "",
-        "zelle": "",
         "date_posted": "2022-04-01",
     }
     client.post(
@@ -78,7 +74,6 @@ def test_delete_a_seller(client, normal_user_token_headers):
         "name": "Super Seller",
         "email": "www.doogle.com",
         "paypal": "",
-        "zelle": "",
         "date_posted": "2022-04-01",
     }
     client.post(

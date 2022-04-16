@@ -15,7 +15,7 @@ def create_new_book(book: BookCreate, db: Session):
         publisher=book.publisher,
         image=book.image,
         price=book.price,
-        status=book.status,
+        is_available=book.is_available,
         own=book.own,
         collection=book.collection,
         uuid=book.uuid,

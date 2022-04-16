@@ -37,10 +37,17 @@ async def home(request: Request, db: Session = Depends(get_db), msg: str = None,
 """
 
 @router.get("/list-all-sellers/")
-def list_all_sellers(request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+def list_all_sellers(request: Request, db: Session = Depends(get_db)):
     sellers = list_sellers(db=db)
     return templates.TemplateResponse(
         "sellers/list_all_sellers.html", {"request": request, "sellers": sellers}
+    )
+
+@router.get("/list-all-sellers-edit/")
+def list_all_sellers(request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+    sellers = list_sellers(db=db)
+    return templates.TemplateResponse(
+        "sellers/list_all_sellers_edit.html", {"request": request, "sellers": sellers}
     )
 
 @router.get("/sellers/{id}")
@@ -52,7 +59,7 @@ def seller_detail(id: int, request: Request, db: Session = Depends(get_db), api_
 
 
 @router.get("/post-a-seller/")
-def create_seller(request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
+def create_seller(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("sellers/create_seller.html", {"request": request})
 
 
@@ -68,7 +75,7 @@ async def create_seller(request: Request, db: Session = Depends(get_db), api_key
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
             seller = SellerCreate(**form.__dict__)
-            seller = create_new_seller(seller=seller, db=db, owner_id=current_user.id)
+            seller = create_new_seller(seller=seller, db=db)
             return responses.RedirectResponse(
                 f"/details/{seller.id}", status_code=status.HTTP_302_FOUND
             )
@@ -100,7 +107,7 @@ async def update_seller(id: int, request: Request, db: Session = Depends(get_db)
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
             seller = SellerCreate(**form.__dict__)
-            seller = update_seller_by_id(id=id, seller=seller, db=db, owner_id=current_user.id)
+            seller = update_seller_by_id(id=id, seller=seller, db=db)
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(

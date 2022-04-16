@@ -30,7 +30,7 @@ def create_seller(
     db: Session = Depends(get_db),
     current_user: Users = Depends(get_current_user_from_token),
 ):
-    seller = create_new_seller(seller=seller, db=db, owner_id=current_user.id)
+    seller = create_new_seller(seller=seller, db=db)
     return seller 
 
 
@@ -56,7 +56,7 @@ def read_sellers(db: Session = Depends(get_db)):
 @router.put("/update_seller/{id}")
 def update_seller(id: int, seller: SellerCreate, db: Session = Depends(get_db)):
     current_user = 1
-    message = update_seller_by_id(id=id, seller=seller, db=db, owner_id=current_user)
+    message = update_seller_by_id(id=id, seller=seller, db=db)
     if not message:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Seller with id {id} not found"
@@ -76,6 +76,9 @@ def delete_seller(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Seller with id {id} does not exist",
         )
+    delete_seller_by_id(id=id, db=db)
+    return {"detail": "Successfully deleted."}
+    """
     print(seller.owner_id, current_user.id, current_user.is_superuser)
     if seller.owner_id == current_user.id or current_user.is_superuser:
         delete_seller_by_id(id=id, db=db, owner_id=current_user.id)
@@ -83,6 +86,7 @@ def delete_seller(
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not permitted!!!!"
     )
+    """
 
 
 @router.get("/autocomplete_seller")

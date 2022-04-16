@@ -19,23 +19,74 @@
       <h3 class="text-center display-4">Edit a Seller</h3>
       <form method="POST">
         <div class="mb-3">
+          <label>ID:</label>
           <input type="text" required class="form-control" name="id" value="{{seller.id}}" placeholder="">
         </div>
         <div class="mb-3">
+          <label>Name:</label>
           <input type="text" required class="form-control" name="name" value="{{seller.name}}" placeholder="Seller Name here">
         </div>
         <div class="mb-3">
+          <label>Email:</label>
           <input type="email" required placeholder="Seller Email here" name="email" value="{{seller.email}}" class="form-control">
         </div>
         <div class="mb-3">
-          <input type="text" placeholder="Seller PayPal here" name="paypal" value="{{seller.paypal}}" class="form-control">
-        </div>
-        <div class="mb-3">
-          <input type="text" placeholder="Seller Zelle here" name="zelle" value="{{seller.zelle}}" class="form-control">
-        </div>
-        <div class="mb-3">
+          <label>Book collection:</label>
           <input type="text" placeholder="Seller Collection here" name="collection" value="{{seller.collection}}" class="form-control">
         </div>
+
+        <div class="mb-3">
+          <label>Total number of books for sale:</label>
+          <input type="number" placeholder="Total number of books here" name="total_number_of_books" value="{{seller.total_number_of_books}}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>Book drop-off location:</label>
+          <select name="dropoff_location">
+            <option value="1"{% if seller.dropoff_location==1 %} selected="selected"{% endif %}>BISV</option>
+            <option value="2"{% if seller.dropoff_location==2 %} selected="selected"{% endif %}>BASIS Fremont</option>
+            <option value="3"{% if seller.dropoff_location==3 %} selected="selected"{% endif %}>Evergreen 95145</option>
+            <option value="4"{% if seller.dropoff_location==4 %} selected="selected"{% endif %}>Evergreen 95138</option>
+            <option value="5"{% if seller.dropoff_location==5 %} selected="selected"{% endif %}>West San Jose</option>
+            <option value="6"{% if seller.dropoff_location==6 %} selected="selected"{% endif %}>Fremont</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="html">Pricing:</label>
+          <select name="pricing_option">
+            <option value="1"{% if seller.pricing_option==1 %} selected="selected"{% endif %}>Please price the books for me</option>
+            <option value="2"{% if seller.pricing_option==2 %} selected="selected"{% endif %}>We have our own prices (in this case, please label the inside cover of each book with its price)</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="html">What should we do with the proceeds?</label>
+          <select name="proceed_option">
+            <option value="1"{% if seller.proceed_option==1 %} selected="selected"{% endif %}>I wish to donate ALL of my books & the subsequent money to the book drive</option>
+            <option value="2"{% if seller.proceed_option==2 %} selected="selected"{% endif %}>PayPal it to me (enter information below)</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>My PayPal is (if you selected PayPal above):</label>
+          <input type="text" placeholder="Seller PayPal here" name="paypal" value="{{seller.paypal}}" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label for="html">What should we do with extra books that don't sell?</label>
+          <select name="extrabook_option">
+            <option value="1"{% if seller.extrabook_option==1 %} selected="selected"{% endif %}>Donate to the book drive</option>
+            <option value="2"{% if seller.extrabook_option==2 %} selected="selected"{% endif %}>I will pick up from BISV</option>
+            <option value="3"{% if seller.extrabook_option==3 %} selected="selected"{% endif %}>I will pick up from BASIS Fremont</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Additional questions or comments:</label>
+          <input type="text" placeholder="Comments here" name="seller.comments" value="{{comments}}" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>

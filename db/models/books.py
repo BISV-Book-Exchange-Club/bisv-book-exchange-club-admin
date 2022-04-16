@@ -19,7 +19,7 @@ class Books(Base):
     publisher = Column(String)
     image = Column(String)
     price = Column(Integer)
-    status = Column(Integer)
+    is_available = Column(Boolean(), default=True)
     own = Column(String)
     collection = Column(String)
     uuid = Column(String)

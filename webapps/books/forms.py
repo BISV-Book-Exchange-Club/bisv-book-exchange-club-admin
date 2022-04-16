@@ -17,7 +17,7 @@ class BookCreateForm:
         self.publisher: str
         self.image: str
         self.price: int
-        self.status: int 
+        self.is_available: int 
         self.own: str
         self.collection: str
         self.uuid: str
@@ -34,7 +34,7 @@ class BookCreateForm:
         self.publisher = form.get("publisher")
         self.image = form.get("image")
         self.price = form.get("price")
-        self.status = form.get("status")
+        self.is_available = form.get("is_available")
         self.own = form.get("own")
         self.collection = form.get("collection")
         self.uuid = form.get("uuid")
