@@ -19,13 +19,20 @@ from webapps.users.forms import UserCreateForm
 
 import os
 import pyotp
-import secrets
+import string
+import random
 
 
 templates = Jinja2Templates(directory="templates")
 router = APIRouter(include_in_schema=False)
 
 ALLOWED_EMAIL_LIST = os.getenv('ALLOWED_EMAIL_LIST').split(',')
+
+
+def randompassword():
+  chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
+  size = random.randint(8, 12)
+  return ''.join(random.choice(chars) for x in range(size))
 
 
 def create_temp_user(email, temp_password, otp_secret, db):
@@ -122,8 +129,7 @@ async def register(request: Request, db: Session = Depends(get_db)):
                     form.__dict__["otp_secret"] = ""
 
                     # Create temp password and One-Time Password
-                    password_length = 13
-                    temp_password = secrets.token_urlsafe(password_length)
+                    temp_password = randompassword()
                     otp_secret = pyotp.random_base32()
 
                     # Create temp user
