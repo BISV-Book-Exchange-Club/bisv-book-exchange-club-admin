@@ -279,8 +279,8 @@ def import_book(header_dict, row, db, owner_id):
             # Create a new seller and get seller ID
             if (book['seller_id'] == 0):
                 new_sellercreate = SellerCreate(
-                    name='No Name',
-                    email='No Email',
+                    name=book['collection'],
+                    email='test@placeholder.org',
                     paypal='',
                     zelle='',
                     collection=book['collection'],
