@@ -46,10 +46,10 @@
           <label for="html">Price:</label> <input type="number" required placeholder="Book Price here" name="price" id="price" value="{{book.price}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Is Available: (1: Available, 0: Not Available)</label> 
+          <label for="html">Is Available:</label> 
           <select name="is_available">
-            <option value="1"{% if book.is_available==1 %} selected="selected"{% endif %}>Available</option>
-            <option value="0"{% if book.is_available==0 %} selected="selected"{% endif %}>Not Available</option>
+            <option value="1"{% if book.is_available == 1 %} selected="selected"{% endif %}>Available</option>
+            <option value="-1"{% if book.is_available == -1 %} selected="selected"{% endif %}>Not Available</option>
           </select>
         </div>
         <div class="mb-3">

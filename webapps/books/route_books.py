@@ -7,7 +7,7 @@ import os
 from typing import List
 from typing import Optional
 
-from apis.version1.route_login import get_current_user_from_token
+from apis.version1.route_login import get_current_db_user
 from core.security import get_api_key
 from db.models.users import Users
 from db.repository.books import create_new_book
@@ -137,11 +137,7 @@ async def create_book(request: Request, db: Session = Depends(get_db), api_key: 
     await form.load_data()
     if form.is_valid():
         try:
-            token = request.cookies.get("access_token")
-            scheme, param = get_authorization_scheme_param(
-                token
-            )  # scheme will hold "Bearer" and param will hold actual token value
-            current_user: User = get_current_user_from_token(token=param, db=db)
+            current_user: User = get_current_db_user(request=request, db=db)
             try:
                 book = BookCreate(**form.__dict__)
                 book = create_new_book(book=book, db=db)
@@ -174,12 +170,9 @@ async def update_book(id: int, request: Request, db: Session = Depends(get_db), 
     await form.load_data()
     if form.is_valid():
         try:
-            token = request.cookies.get("access_token")
-            scheme, param = get_authorization_scheme_param(
-                token
-            )  # scheme will hold "Bearer" and param will hold actual token value
-            current_user: User = get_current_user_from_token(token=param, db=db)
+            current_user: User = get_current_db_user(request=request, db=db)
             try:
+                print(form.__dict__)
                 book = BookCreate(**form.__dict__)
                 book = update_book_by_id(id=id, book=book, db=db)
             except Exception as err:
@@ -401,17 +394,13 @@ def get_upload_books_from_csv(request: Request, db: Session = Depends(get_db), a
 async def post_upload_books_from_csv(request: Request, files: List[UploadFile], db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     errors = []
     try:
-        token = request.cookies.get("access_token")
-        scheme, param = get_authorization_scheme_param(
-            token
-        )  # scheme will hold "Bearer" and param will hold actual token value
-        current_user: User = get_current_user_from_token(token=param, db=db)
+        current_user: User = get_current_db_user(request=request, db=db)
         errors = upload_books_from_csv(request=request, files=files, db=db, owner_id=current_user.id)
         if (len(errors) > 0):
             return templates.TemplateResponse("books/upload_books_from_csv.html", {"request": request, "errors": errors})
         else:
             return responses.RedirectResponse(
-                f"/list-all-books", status_code=status.HTTP_302_FOUND
+                f"/list-all-books-edit", status_code=status.HTTP_302_FOUND
             )
     except Exception as e:
         print(e)

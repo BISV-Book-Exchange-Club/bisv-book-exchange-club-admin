@@ -1,6 +1,6 @@
 from typing import Optional
 
-from apis.version1.route_login import get_current_user_from_token
+from apis.version1.route_login import get_current_db_user
 from core.security import get_api_key
 from db.models.users import Users
 from db.repository.sellers import create_new_seller
@@ -69,11 +69,7 @@ async def create_seller(request: Request, db: Session = Depends(get_db), api_key
     await form.load_data()
     if form.is_valid():
         try:
-            token = request.cookies.get("access_token")
-            scheme, param = get_authorization_scheme_param(
-                token
-            )  # scheme will hold "Bearer" and param will hold actual token value
-            current_user: User = get_current_user_from_token(token=param, db=db)
+            current_user: User = get_current_db_user(request=request, db=db)
             try:
                 seller = SellerCreate(**form.__dict__)
                 seller = create_new_seller(seller=seller, db=db)
@@ -105,11 +101,7 @@ async def update_seller(id: int, request: Request, db: Session = Depends(get_db)
     await form.load_data()
     if form.is_valid():
         try:
-            token = request.cookies.get("access_token")
-            scheme, param = get_authorization_scheme_param(
-                token
-            )  # scheme will hold "Bearer" and param will hold actual token value
-            current_user: User = get_current_user_from_token(token=param, db=db)
+            current_user: User = get_current_db_user(request=request, db=db)
             try:
                 seller = SellerCreate(**form.__dict__)
                 seller = update_seller_by_id(id=id, seller=seller, db=db)

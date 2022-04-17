@@ -27,7 +27,7 @@ class SellerCreateForm:
         self.collection = form.get("collection")
         self.total_number_of_books = form.get("total_number_of_books")
         self.dropoff_location = form.get("dropoff_location")
-        self.pricing_option = form.get("pricing_option ")
+        self.pricing_option = form.get("pricing_option")
         self.proceed_option = form.get("proceed_option")
         self.extrabook_option = form.get("extrabook_option")
         self.comments = form.get("comments")
