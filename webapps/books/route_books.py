@@ -242,7 +242,7 @@ def import_book(header_dict, row, db, owner_id):
             'publisher': '',
             'image': '',
             'price': 0,
-            'is_available': True,
+            'is_available': 1,
             'own': '',
             'collection': '',
             'uuid': '',
@@ -270,7 +270,7 @@ def import_book(header_dict, row, db, owner_id):
                 book['price'] = 0
 
             # Make the book available
-            book['is_available'] = True 
+            book['is_available'] = 1 
 
             # Get seller ID by collection
             try:

@@ -17,7 +17,7 @@ class BookCreateForm:
         self.publisher: str
         self.image: str
         self.price: int
-        self.is_available: bool 
+        self.is_available: int 
         self.own: str
         self.collection: str
         self.uuid: str
