@@ -14,7 +14,7 @@ class BookBase(BaseModel):
     editioncopyright: Optional[str] = None 
     publisher: Optional[str] = None 
     image: Optional[str] = None
-    price: int
+    price: Optional[int] = 0  
     is_available: Optional[bool] = True 
     own: Optional[str] = None
     collection: Optional[str] = None
@@ -33,7 +33,7 @@ class BookCreate(BookBase):
     editioncopyright: Optional[str] = None
     publisher: Optional[str] = None
     image: Optional[str] = None
-    price: int
+    price: Optional[int] = 0 
     is_available: Optional[bool] = True
     own: Optional[str] = None
     collection: Optional[str] = None
@@ -52,7 +52,7 @@ class ShowBook(BookBase):
     editioncopyright: Optional[str] = None
     publisher: Optional[str] = None
     image: Optional[str] = None
-    price: int
+    price: Optional[int] = 0  
     is_available: Optional[bool] = True
     own: Optional[str] = None
     collection: Optional[str] = None

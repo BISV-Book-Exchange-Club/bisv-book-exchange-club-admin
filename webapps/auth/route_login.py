@@ -1,6 +1,6 @@
 from apis.version1.route_login import login_for_access_token
 from db.session import get_db
-from core.security import get_api_key_default, API_KEY_NAME
+from core.security import get_api_key_default, logout_remove_cookie
 from fastapi import APIRouter, Security, Depends, FastAPI, HTTPException, Request
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
@@ -37,7 +37,7 @@ async def login(request: Request, db: Session = Depends(get_db)):
             msg="Login Successful :)"
             form.__dict__.update(msg=msg)
             books = list_books(db=db)
-            response = templates.TemplateResponse("general_pages/homepage.html", {"request": request, "books": books, "msg": msg})
+            response = templates.TemplateResponse("general_pages/homepage_login.html", {"request": request, "books": books, "msg": msg})
             login_for_access_token(response=response, form_data=form, db=db)
             return response
         except HTTPException:
@@ -60,8 +60,7 @@ async def home(request: Request, db: Session = Depends(get_db), msg: str = None,
             "general_pages/homepage.html", {"request": request, "books": books, "msg": msg}
         )
 
+
 @router.get("/logout")
 async def route_logout_and_remove_cookie():
-    response = RedirectResponse(url="/login/")
-    response.delete_cookie(API_KEY_NAME)
-    return response
+    return logout_remove_cookie()

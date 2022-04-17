@@ -1,4 +1,4 @@
-{% extends "shared/base.html" %}
+{% extends "shared/base_login.html" %}
 
 
 {% block title %}
@@ -43,7 +43,7 @@
           <label for="html">Image:</label> <input type="text" placeholder="Book Image here" name="image" id="image" value="{{book.image}}" class="form-control">
         </div>
         <div class="mb-3">
-          <label for="html">Price:</label> <input type="number" placeholder="Book Price here" name="price" id="price" value="{{book.price}}" class="form-control">
+          <label for="html">Price:</label> <input type="number" required placeholder="Book Price here" name="price" id="price" value="{{book.price}}" class="form-control">
         </div>
         <div class="mb-3">
           <label for="html">Is Available: (1: Available, 0: Not Available)</label> 

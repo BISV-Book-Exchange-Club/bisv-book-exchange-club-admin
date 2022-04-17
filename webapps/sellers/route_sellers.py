@@ -54,7 +54,7 @@ def list_all_sellers(request: Request, db: Session = Depends(get_db), api_key: A
 def seller_detail(id: int, request: Request, db: Session = Depends(get_db), api_key: APIKey = Depends(get_api_key)):
     seller = retrieve_seller(id=id, db=db)
     return templates.TemplateResponse(
-        "sellers/edit_seller.html", {"request": request, "seller": seller}
+        "sellers/details.html", {"request": request, "seller": seller}
     )
 
 
@@ -74,11 +74,15 @@ async def create_seller(request: Request, db: Session = Depends(get_db), api_key
                 token
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
-            seller = SellerCreate(**form.__dict__)
-            seller = create_new_seller(seller=seller, db=db)
-            return responses.RedirectResponse(
-                f"/details/{seller.id}", status_code=status.HTTP_302_FOUND
-            )
+            try:
+                seller = SellerCreate(**form.__dict__)
+                seller = create_new_seller(seller=seller, db=db)
+                return responses.RedirectResponse(
+                    f"/sellers/{seller.id}", status_code=status.HTTP_302_FOUND
+                )
+            except Exception as err:
+                print(str(err))
+                form.__dict__.get("errors").append(str(err))
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(
@@ -106,8 +110,12 @@ async def update_seller(id: int, request: Request, db: Session = Depends(get_db)
                 token
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
-            seller = SellerCreate(**form.__dict__)
-            seller = update_seller_by_id(id=id, seller=seller, db=db)
+            try:
+                seller = SellerCreate(**form.__dict__)
+                seller = update_seller_by_id(id=id, seller=seller, db=db)
+            except Exception as err:
+                print(str(err))
+                form.__dict__.get("errors").append(str(err))
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(

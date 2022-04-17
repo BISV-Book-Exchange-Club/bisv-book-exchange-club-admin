@@ -1,3 +1,4 @@
+from app import *
 import chardet
 import csv
 import math
@@ -141,15 +142,19 @@ async def create_book(request: Request, db: Session = Depends(get_db), api_key: 
                 token
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
-            book = BookCreate(**form.__dict__)
-            book = create_new_book(book=book, db=db)
-            return responses.RedirectResponse(
-                f"/details/{book.id}", status_code=status.HTTP_302_FOUND
-            )
+            try:
+                book = BookCreate(**form.__dict__)
+                book = create_new_book(book=book, db=db)
+                return responses.RedirectResponse(
+                    f"/books/{book.id}", status_code=status.HTTP_302_FOUND
+                )
+            except Exception as err:
+                print(str(err))
+                form.__dict__.get("errors").append(str(err))
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(
-                "You might not be logged in, In case problem persists please contact us."
+                "You might not be logged in, In case problem persists please contact us. "
             )
             return templates.TemplateResponse("books/create_book.html", form.__dict__)
     return templates.TemplateResponse("books/create_book.html", form.__dict__)
@@ -174,10 +179,12 @@ async def update_book(id: int, request: Request, db: Session = Depends(get_db), 
                 token
             )  # scheme will hold "Bearer" and param will hold actual token value
             current_user: User = get_current_user_from_token(token=param, db=db)
-            book = BookCreate(**form.__dict__)
-            print('PREUPD')
-            print(form.__dict__)
-            book = update_book_by_id(id=id, book=book, db=db)
+            try:
+                book = BookCreate(**form.__dict__)
+                book = update_book_by_id(id=id, book=book, db=db)
+            except Exception as err:
+                print(str(err))
+                form.__dict__.get("errors").append(str(err))
         except Exception as e:
             print(e)
             form.__dict__.get("errors").append(
@@ -376,7 +383,7 @@ def upload_books_from_csv(request, files, db, owner_id):
                     line_count += 1
 
             # Send to Gmail for storage
-            # TODO:
+            send_email(FROM_EMAIL, 'Copy of CSV File Uploaded: ' + csv_name, 'Please save this email for later reference.', file_path, csv_name)
 
             delete_file(file_path)
         except Exception as err:

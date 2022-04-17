@@ -74,3 +74,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
     )
     return encoded_jwt
+
+
+def logout_remove_cookie():
+    response = RedirectResponse(url="/login/")
+    response.delete_cookie(API_KEY_NAME)
+    return response
